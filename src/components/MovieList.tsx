@@ -1,4 +1,4 @@
-import {View, Text, FlatList, Image} from 'react-native';
+import {View, FlatList,} from 'react-native';
 import React from 'react';
 import Category from './Category';
 import {genres} from '../constants/Data';

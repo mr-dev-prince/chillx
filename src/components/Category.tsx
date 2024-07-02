@@ -1,5 +1,5 @@
-import {View, Text, ScrollView, FlatList, Image} from 'react-native';
-import React, {PureComponent, useEffect, useState} from 'react';
+import {View, Text,  FlatList, Image} from 'react-native';
+import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import Separator from './Separator';
 
