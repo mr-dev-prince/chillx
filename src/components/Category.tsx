@@ -1,14 +1,15 @@
-import {View, Text,  FlatList, Image} from 'react-native';
-import React, { useEffect, useState} from 'react';
+import {View, Text, FlatList, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Separator from './Separator';
+import MovieComponent from './MovieComponent';
 
-type PropType = {
+type CategoryProps = {
   heading: string;
   id: string;
 };
 
-interface Movie {
+export type Movie = {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -23,22 +24,13 @@ interface Movie {
   video: boolean;
   vote_average: number;
   vote_count: number;
-}
+};
 
-const Category: React.FC<PropType> = ({heading, id}) => {
+const Category: React.FC<CategoryProps> = ({heading, id}) => {
   const [data, setData] = useState<Movie[]>([]);
 
-  const renderItem = ({item}: {item: {poster_path: string}}) => {
-    return (
-      <View className="h-44 w-32 rounded-lg">
-        <Image
-          className="h-full w-full object-cover rounded-xl"
-          source={{
-            uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
-          }}
-        />
-      </View>
-    );
+  const renderItem = ({item}: {item: Movie}) => {
+    return <MovieComponent poster={item.poster_path} id={item.id} />;
   };
 
   useEffect(() => {
@@ -51,7 +43,7 @@ const Category: React.FC<PropType> = ({heading, id}) => {
       };
       getMovies();
     } catch (error) {
-      console.log('Get movies error', error); 
+      console.log('Get movies error', error);
     }
   }, []);
   return (
@@ -76,4 +68,3 @@ const Category: React.FC<PropType> = ({heading, id}) => {
 };
 
 export default Category;
-
