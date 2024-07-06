@@ -1,6 +1,5 @@
 import {View} from 'react-native';
 import React from 'react';
-import {Provider as PaperProdvider} from 'react-native-paper';
 
 //screens
 import Detail from './screens/Detail';
@@ -24,7 +23,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
     <NavigationContainer>
-      <PaperProdvider>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
             name="Home"
@@ -37,7 +35,6 @@ const App = () => {
             options={{headerShown: false}}
           />
         </Stack.Navigator>
-      </PaperProdvider>
     </NavigationContainer>
   );
 };

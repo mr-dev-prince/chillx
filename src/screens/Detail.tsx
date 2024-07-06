@@ -7,7 +7,6 @@ import BackAndOptionHeader from '../components/BackAndOptionHeader';
 import {Icon} from '@rneui/base';
 import Separator from '../components/Separator';
 import IconComponent from '../components/IconComponent';
-import Loader from '../components/Loader';
 
 type DetailProps = {
   movieId?: number;
@@ -92,9 +91,6 @@ const Detail = () => {
     return (
       <View className="h-full w-full flex justify-center items-center bg-black">
         <BackAndOptionHeader />
-        <View>
-          <Loader />
-        </View>
       </View>
     );
   }
