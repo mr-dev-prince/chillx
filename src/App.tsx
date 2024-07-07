@@ -1,39 +1,56 @@
 import React from 'react';
-
-//screens
-import Detail from './screens/Detail';
-import Home from './screens/Home';
-
-//Navigation
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {enableScreens} from 'react-native-screens';
 
-//type safety
+// Screens
+import Home from './screens/Home';
+import Detail from './screens/Detail';
+import Favourite from './screens/Favourite';
 
+// Types
 export type RootStackParamList = {
   Home: undefined;
-  MovieList: undefined;
   Detail: {movieId: number};
 };
 
+export type RootDrawerParamList = {
+  MainStack: undefined;
+  Favourite: undefined;
+};
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator<RootDrawerParamList>();
+
+const MainStack = () => {
+  enableScreens();
+
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Detail"
+        component={Detail}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Detail"
-          component={Detail}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
+      <Drawer.Navigator
+        initialRouteName="MainStack"
+        screenOptions={{headerShown: false}}>
+        <Drawer.Screen name="MainStack" component={MainStack} />
+        <Drawer.Screen name="Favourite" component={Favourite} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };

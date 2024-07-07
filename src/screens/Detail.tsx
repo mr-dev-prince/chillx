@@ -4,13 +4,8 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 import {RootStackParamList} from '../App';
 import BackAndOptionHeader from '../components/BackAndOptionHeader';
-import {Icon} from '@rneui/base';
 import Separator from '../components/Separator';
 import IconComponent from '../components/IconComponent';
-
-type DetailProps = {
-  movieId?: number;
-};
 
 interface MovieDetail {
   adult: boolean;
