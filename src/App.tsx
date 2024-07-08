@@ -14,6 +14,7 @@ import {enableScreens} from 'react-native-screens';
 import Home from './screens/Home';
 import Detail from './screens/Detail';
 import Favourite from './screens/Favourite';
+import WatchList from './screens/WatchList';
 
 // Types
 export type RootStackParamList = {
@@ -22,8 +23,9 @@ export type RootStackParamList = {
 };
 
 export type RootDrawerParamList = {
-  MainStack: undefined;
+  Home: undefined;
   Favourite: undefined;
+  Watchlist: undefined;
 };
 
 export type CombinedNavigationProp = DrawerNavigationProp<RootDrawerParamList> &
@@ -55,10 +57,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="MainStack"
+        initialRouteName="Home"
         screenOptions={{headerShown: false}}>
-        <Drawer.Screen name="MainStack" component={MainStack} />
+        <Drawer.Screen name="Home" component={MainStack} />
         <Drawer.Screen name="Favourite" component={Favourite} />
+        <Drawer.Screen name="Watchlist" component={WatchList} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
