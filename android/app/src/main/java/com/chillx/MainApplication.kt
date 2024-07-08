@@ -16,11 +16,11 @@ class MainApplication : Application(), ReactApplication {
 
     override val reactNativeHost: ReactNativeHost =
         object : DefaultReactNativeHost(this) {
-            override fun getPackages(): List<ReactPackage> =
-                PackageList(this).packages.apply {
-                    new ReactNativeFirebaseAppPackage()
-                    // Add other packages that cannot be autolinked yet manually here if needed
-                }
+            override fun getPackages(): List<ReactPackage> {
+                val packages = PackageList(this).packages
+                // Add other packages that cannot be autolinked yet manually here if needed
+                return packages
+            }
 
             override fun getJSMainModuleName(): String = "index"
 

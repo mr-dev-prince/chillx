@@ -1,12 +1,12 @@
 // SignupScreen.tsx
 
 import React, {useEffect, useState} from 'react';
-import {View, TextInput, Button, Text} from 'react-native';
-import {signup} from '../utils/auth';
+import {View, TextInput, Text, Alert} from 'react-native';
 import BackAndOptionHeader from '../components/BackAndOptionHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import useNavigationStore from '../context/NavigationContext';
 import {Icon} from '@rneui/base';
+import {firebase} from '../config/firebaseConfig';
 
 const SignUp: React.FC = () => {
   const {navigation} = useNavigationStore();
@@ -25,8 +25,42 @@ const SignUp: React.FC = () => {
     }
   }, [confirmPassword, password]);
 
-  const handleSignup = () => {
-    signup({email, password});
+  const handleSignup = async () => {
+    if (!email || !password) {
+      setErrorMessage('Empty fields!');
+      return;
+    }
+
+    try {
+      setErrorMessage('');
+      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      Alert.alert('User Created', 'You are successfully registered!');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (error: any) {
+      let signUpErr = 'An error occurred. Please try again.';
+
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          signUpErr = 'Email address is already in use.';
+          break;
+        case 'auth/invalid-email':
+          signUpErr = 'Invalid email address.';
+          break;
+        case 'auth/weak-password':
+          signUpErr = 'Password should be at least 6 characters.';
+          break;
+        default:
+          if (error.message) {
+            signUpErr = error.message;
+          }
+      }
+      setErrorMessage(signUpErr);
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    }
   };
 
   return (
@@ -37,7 +71,7 @@ const SignUp: React.FC = () => {
           Create Account
         </Text>
         <View className="mt-3 w-full ">
-          <View className="h-10 flex justify-center items-center">
+          <View className="h-fit py-1 flex justify-center items-center">
             {errorMessage ? (
               <View className="flex flex-row justify-center items-center gap-2">
                 <Icon name="warning" type="ionicon" color={'red'} size={20} />

@@ -1,32 +1,55 @@
 // LoginScreen.tsx
 
 import React, {useEffect, useState} from 'react';
-import {View, TextInput, Button, Text} from 'react-native';
-import {login} from '../utils/auth';
+import {View, TextInput, Button, Text, Alert} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import useNavigationStore from '../context/NavigationContext';
 import BackAndOptionHeader from '../components/BackAndOptionHeader';
 import {Icon} from '@rneui/base';
+import {firebase} from '../config/firebaseConfig';
 
 const LoginScreen: React.FC = () => {
   const {navigation} = useNavigationStore();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  useEffect(() => {
-    if (password.length === 0 || confirmPassword.length === 0) {
-      setErrorMessage('');
-    } else if (confirmPassword !== password) {
-      setErrorMessage('Password do not match !');
-    } else {
-      setErrorMessage('');
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setErrorMessage('Empty fields!');
+      return;
     }
-  }, [confirmPassword, password]);
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      Alert.alert('User Logged in', 'You are logged in successfully');
+      setEmail('');
+      setPassword('');
+    } catch (error: any) {
+      let errorMessage = 'An error occurred. Please try again.';
 
-  const handleSignup = () => {
-    login({email, password});
+      switch (error.code) {
+        case 'auth/invalid-email':
+          errorMessage = 'Invalid email address.';
+          break;
+        case 'auth/user-not-found':
+          errorMessage = 'User not found. Please check your credentials.';
+          break;
+        case 'auth/wrong-password':
+          errorMessage = 'Invalid password. Please try again.';
+          break;
+        default:
+          if (error.message) {
+            errorMessage = 'Invalid Credentials';
+          }
+      }
+
+      setTimeout(() => {
+        setErrorMessage(errorMessage);
+      }, 500);
+
+      setEmail('');
+      setPassword('');
+    }
   };
 
   return (
@@ -35,7 +58,7 @@ const LoginScreen: React.FC = () => {
       <View className="w-full h-[80%] p-3">
         <Text className="text-center text-3xl font-bold text-white">Login</Text>
         <View className="mt-3 w-full ">
-          <View className="h-10 flex justify-center items-center">
+          <View className="h-fit py-1 flex justify-center items-center">
             {errorMessage ? (
               <View className="flex flex-row justify-center items-center gap-2">
                 <Icon name="warning" type="ionicon" color={'red'} size={24} />
@@ -62,7 +85,7 @@ const LoginScreen: React.FC = () => {
             secureTextEntry
           />
 
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity activeOpacity={0.8} onPress={handleLogin}>
             <View className="mt-5 p-2 rounded-xl bg-blue-500">
               <Text className="text-center font-semibold text-lg text-white">
                 Login
