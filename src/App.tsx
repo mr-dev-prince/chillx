@@ -15,17 +15,23 @@ import Home from './screens/Home';
 import Detail from './screens/Detail';
 import Favourite from './screens/Favourite';
 import WatchList from './screens/WatchList';
+import AuthScreen from './screens/AuthScreen';
+import LogIn from './screens/LogIn';
+import SignUp from './screens/SignUp';
 
 // Types
 export type RootStackParamList = {
   Home: undefined;
   Detail: {movieId: number};
+  Login: undefined;
+  Signup: undefined;
 };
 
 export type RootDrawerParamList = {
-  Home: undefined;
+  Main: undefined;
   Favourite: undefined;
   Watchlist: undefined;
+  Login: undefined;
 };
 
 export type CombinedNavigationProp = DrawerNavigationProp<RootDrawerParamList> &
@@ -49,6 +55,16 @@ const MainStack = () => {
         component={Detail}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="Login"
+        component={LogIn}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Signup"
+        component={SignUp}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -57,11 +73,12 @@ const App = () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="Home"
+        initialRouteName="Main"
         screenOptions={{headerShown: false}}>
-        <Drawer.Screen name="Home" component={MainStack} />
+        <Drawer.Screen name="Main" component={MainStack} />
         <Drawer.Screen name="Favourite" component={Favourite} />
         <Drawer.Screen name="Watchlist" component={WatchList} />
+        <Drawer.Screen name="Login" component={AuthScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

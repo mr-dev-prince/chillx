@@ -23,7 +23,7 @@ const Header = () => {
         </View>
       </TouchableOpacity>
       <FAB color="gray" size="small">
-        <Icon className=" text-center" name="search" color={'white'} />
+        <Icon className="text-center" name="search" color={'white'} />
       </FAB>
     </View>
   );

@@ -2,12 +2,13 @@ import {View} from 'react-native';
 import React from 'react';
 import {FAB, Icon} from '@rneui/base';
 import useNavigationStore from '../context/NavigationContext';
+import {useNavigation} from '@react-navigation/native';
 
 const BackAndOptionHeader = () => {
-  const navigation = useNavigationStore(state => state.navigation);
+  const navigation = useNavigation();
 
   const handleClick = () => {
-    navigation?.popToTop();
+    navigation?.goBack();
   };
   return (
     <View className="flex flex-row w-full justify-between px-3 py-2 absolute z-50 top-0">
