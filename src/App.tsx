@@ -1,7 +1,13 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
+import {
+  DrawerNavigationProp,
+  createDrawerNavigator,
+} from '@react-navigation/drawer';
 import {enableScreens} from 'react-native-screens';
 
 // Screens
@@ -19,6 +25,9 @@ export type RootDrawerParamList = {
   MainStack: undefined;
   Favourite: undefined;
 };
+
+export type CombinedNavigationProp = DrawerNavigationProp<RootDrawerParamList> &
+  NativeStackNavigationProp<RootStackParamList>;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootDrawerParamList>();

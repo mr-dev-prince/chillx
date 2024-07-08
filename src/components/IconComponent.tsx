@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon} from '@rneui/base';
+import { Icon} from '@rneui/base';
 
 const IconComponent = ({
   name,

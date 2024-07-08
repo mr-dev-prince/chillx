@@ -1,14 +1,20 @@
-import {View, Pressable, Text} from 'react-native';
+import {View} from 'react-native';
 import React, {useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../App';
+import {CombinedNavigationProp, RootStackParamList} from '../App';
 import Header from '../components/Header';
 import MovieList from '../components/MovieList';
+import useNavigationStore from '../context/NavigationContext';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({navigation}: HomeProps) => {
-  
+  const {setNavigation} = useNavigationStore();
+
+  useEffect(() => {
+    setNavigation(navigation as CombinedNavigationProp);
+  }, []);
+
   return (
     <View className="bg-black relative h-full">
       <Header />
