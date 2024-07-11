@@ -5,6 +5,7 @@ import {CombinedNavigationProp, RootStackParamList} from '../App';
 import Header from '../components/Header';
 import MovieList from '../components/MovieList';
 import useNavigationStore from '../context/NavigationContext';
+import useUserStore from '../context/UserContext';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 

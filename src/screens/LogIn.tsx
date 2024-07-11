@@ -1,18 +1,20 @@
-// LoginScreen.tsx
-
-import React, {useEffect, useState} from 'react';
-import {View, TextInput, Button, Text, Alert} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import { View, TextInput, Text, Alert } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import useNavigationStore from '../context/NavigationContext';
 import BackAndOptionHeader from '../components/BackAndOptionHeader';
-import {Icon} from '@rneui/base';
-import {firebase} from '../config/firebaseConfig';
+import { Icon } from '@rneui/base';
+import { firebase } from '../config/firebaseConfig';
+import useUserStore from '../context/UserContext';
+import SpinningElement from '../components/Spinner';
 
 const LoginScreen: React.FC = () => {
-  const {navigation} = useNavigationStore();
+  const { navigation } = useNavigationStore();
+  const { setUser } = useUserStore();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -20,10 +22,13 @@ const LoginScreen: React.FC = () => {
       return;
     }
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
+      setLoading(true);
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      setUser(userCredential.user);
       Alert.alert('User Logged in', 'You are logged in successfully');
-      setEmail('');
-      setPassword('');
+      navigation?.navigate('Main'); // Ensure this is navigating to the correct route
     } catch (error: any) {
       let errorMessage = 'An error occurred. Please try again.';
 
@@ -49,6 +54,8 @@ const LoginScreen: React.FC = () => {
 
       setEmail('');
       setPassword('');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,9 +94,13 @@ const LoginScreen: React.FC = () => {
 
           <TouchableOpacity activeOpacity={0.8} onPress={handleLogin}>
             <View className="mt-5 p-2 rounded-xl bg-blue-500">
-              <Text className="text-center font-semibold text-lg text-white">
-                Login
-              </Text>
+              {loading ? (
+                <SpinningElement />
+              ) : (
+                <Text className="text-center font-semibold text-lg text-white">
+                  Login
+                </Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>

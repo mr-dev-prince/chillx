@@ -1,5 +1,3 @@
-// SignupScreen.tsx
-
 import React, {useEffect, useState} from 'react';
 import {View, TextInput, Text, Alert} from 'react-native';
 import BackAndOptionHeader from '../components/BackAndOptionHeader';
@@ -7,6 +5,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import useNavigationStore from '../context/NavigationContext';
 import {Icon} from '@rneui/base';
 import {firebase} from '../config/firebaseConfig';
+import SpinningElement from '../components/Spinner';
 
 const SignUp: React.FC = () => {
   const {navigation} = useNavigationStore();
@@ -14,12 +13,13 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (password.length === 0 || confirmPassword.length === 0) {
       setErrorMessage('');
     } else if (confirmPassword !== password) {
-      setErrorMessage('Password do not match !');
+      setErrorMessage('Password do not match!');
     } else {
       setErrorMessage('');
     }
@@ -33,6 +33,7 @@ const SignUp: React.FC = () => {
 
     try {
       setErrorMessage('');
+      setLoading(true);
       await firebase.auth().createUserWithEmailAndPassword(email, password);
       Alert.alert('User Created', 'You are successfully registered!');
       setEmail('');
@@ -51,15 +52,17 @@ const SignUp: React.FC = () => {
         case 'auth/weak-password':
           signUpErr = 'Password should be at least 6 characters.';
           break;
+        case 'auth/network-request-failed':
+          signUpErr = 'Network request failed!';
+          break;
         default:
           if (error.message) {
             signUpErr = error.message;
           }
       }
       setErrorMessage(signUpErr);
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,9 +110,13 @@ const SignUp: React.FC = () => {
           />
           <TouchableOpacity activeOpacity={0.8} onPress={handleSignup}>
             <View className="mt-5 p-2 rounded-xl bg-blue-500">
-              <Text className="text-center font-semibold text-lg text-white ">
-                Sign Up
-              </Text>
+              {loading ? (
+                <SpinningElement />
+              ) : (
+                <Text className="text-center font-semibold text-lg text-white ">
+                  Sign Up
+                </Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>

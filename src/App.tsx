@@ -1,12 +1,12 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {
-  NativeStackNavigationProp,
   createNativeStackNavigator,
+  NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import {
-  DrawerNavigationProp,
   createDrawerNavigator,
+  DrawerNavigationProp,
 } from '@react-navigation/drawer';
 import {enableScreens} from 'react-native-screens';
 
@@ -18,6 +18,8 @@ import WatchList from './screens/WatchList';
 import AuthScreen from './screens/AuthScreen';
 import LogIn from './screens/LogIn';
 import SignUp from './screens/SignUp';
+import Profile from './screens/Profile';
+import useUserStore from './context/UserContext';
 
 // Types
 export type RootStackParamList = {
@@ -32,6 +34,7 @@ export type RootDrawerParamList = {
   Favourite: undefined;
   Watchlist: undefined;
   Login: undefined;
+  Profile: undefined;
 };
 
 export type CombinedNavigationProp = DrawerNavigationProp<RootDrawerParamList> &
@@ -70,6 +73,8 @@ const MainStack = () => {
 };
 
 const App = () => {
+  const {user} = useUserStore();
+
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -78,7 +83,11 @@ const App = () => {
         <Drawer.Screen name="Main" component={MainStack} />
         <Drawer.Screen name="Favourite" component={Favourite} />
         <Drawer.Screen name="Watchlist" component={WatchList} />
-        <Drawer.Screen name="Login" component={AuthScreen} />
+        {user ? (
+          <Drawer.Screen name="Profile" component={Profile} />
+        ) : (
+          <Drawer.Screen name="Login" component={AuthScreen} />
+        )}
       </Drawer.Navigator>
     </NavigationContainer>
   );

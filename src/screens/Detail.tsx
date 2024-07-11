@@ -129,8 +129,8 @@ const Detail = () => {
             </View>
             <Separator />
             <View className="flex flex-row justify-center items-center">
-              <IconComponent name="star" size={16} color="red" />
-              <Text className="ml-1.5 font-semibold text-red-500">
+              <IconComponent name="star" size={16} color="yellow" />
+              <Text className="ml-1.5 font-semibold text-yellow-300">
                 {detail.vote_average}
               </Text>
             </View>
